@@ -1,0 +1,58 @@
+// -*- c++ -*-
+// You can extend this sample scene file format with your own fields.
+// Edit the scene parsing in Scene.cpp.
+{
+    name = "Sponza",
+   
+    models = {
+      
+       cube = ArticulatedModel::Specification 
+	   {
+            filename = "3ds/fantasy/sponza/sponza.3ds",
+       },
+       
+    },
+    
+    lighting = Lighting::Specification {
+        lightArray = (
+		GLight 
+		{
+			position = Vector4(15, 30, 0.0, 1.0), 
+			spotTarget = Vector3(-7, 0, 0), 
+			spotHalfAngle = 0.6, 
+			color = Power3(100000)
+		}),
+
+        environmentMap = {
+            constant = 1.0,
+            texture = Texture::Specification {
+                filename      = "cubemap/whiteroom/whiteroom_*.png",
+                desiredFormat = "RGB8",
+                dimension     = "DIM_CUBE_MAP",
+                settings      = Texture::Settings::cubeMap(),
+                preprocess    = Texture::Preprocess::gamma(2.0f)
+            }
+        },
+    },
+
+    
+    entities = {
+        // Each entity has a name and is an instance of a model.  The instantiation syntax accepts
+        // two (optional) arguments: a position spline (which can be a single position), and a 
+        // pose spline (which can be a single pose).
+
+		// sides        
+		c0 = cube(CFrame::fromXYZYPRDegrees(0.0,0.0,0.0, 0,0,0)),
+		
+    },
+    
+    camera = GCamera {
+        coordinateFrame = CFrame::fromXYZYPRDegrees( -0.0f,   0.6f,   1.8f,  341.1f,  -0.0f,   0.0f),
+        
+        nearPlaneZ = -0.5,
+        farPlaneZ = -50,
+        fovDirection = "VERTICAL",
+        fovDegrees = 60
+    }
+   
+}

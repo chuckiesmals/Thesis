@@ -1,0 +1,66 @@
+// -*- c++ -*-
+// You can extend this sample scene file format with your own fields.
+// Edit the scene parsing in Scene.cpp.
+{
+    name = "75",
+   
+    models = {
+      
+       cube = ArticulatedModel::Specification 
+	   {
+            filename = "75.off",
+			preprocess = ArticulatedModel::Preprocess 
+			{
+				materialoverride = Material::Specification 
+				{
+					lambertian = "vv_texture.png",
+				}
+
+			},
+       },
+       
+    },
+    
+    lighting = Lighting::Specification {
+        lightArray = (
+            GLight 
+            {
+                position = Vector4(8, 13, 2, 1.0), 
+                color = Power3(10000)
+            }
+            ),
+            
+
+        environmentMap = {
+            constant = 1.0,
+            texture = Texture::Specification {
+                filename      = "cubemap/whiteroom/whiteroom_*.png",
+                desiredFormat = "RGB8",
+                dimension     = "DIM_CUBE_MAP",
+                settings      = Texture::Settings::cubeMap(),
+                preprocess    = Texture::Preprocess::gamma(2.0f)
+            }
+        },
+    },
+
+    
+    entities = {
+        // Each entity has a name and is an instance of a model.  The instantiation syntax accepts
+        // two (optional) arguments: a position spline (which can be a single position), and a 
+        // pose spline (which can be a single pose).
+
+		// sides        
+		c0 = cube(CFrame::fromXYZYPRDegrees(0.0,0.0,0.0, 0,-90,-90)),
+		
+    },
+    
+    camera = GCamera {
+        coordinateFrame = CFrame::fromXYZYPRDegrees( -1.2f,   17.8f,   7.7f,  -50.0f,  -60.0f,   -75.0f),
+        
+        nearPlaneZ = -0.5,
+        farPlaneZ = -50,
+        fovDirection = "VERTICAL",
+        fovDegrees = 60
+    }
+   
+}

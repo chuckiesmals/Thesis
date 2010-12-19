@@ -1,0 +1,89 @@
+// -*- c++ -*-
+// You can extend this sample scene file format with your own fields.
+// Edit the scene parsing in Scene.cpp.
+{
+    name = "Mirror Box",
+   
+    models = {
+        whiteWall = ArticulatedModel::Specification {
+            filename = "ifs/crate.ifs",
+            preprocess = ArticulatedModel::Preprocess {
+                xform = Matrix4::scale(1, 0.01, 1),
+                materialOverride = Material::Specification {
+                    lambertian = Color3(1,1,1),
+                    specular = Color3(0.3),
+                    shininess = mirror()
+                }
+            }
+        },
+
+        greenWall = ArticulatedModel::Specification {
+            filename = "ifs/crate.ifs",
+            preprocess = ArticulatedModel::Preprocess {
+                xform = Matrix4::scale(1, 0.01, 1),
+                materialOverride = Material::Specification {
+                    lambertian = Color3(0,1,0),
+                    specular = Color3(0.3),
+                    shininess = mirror()
+                }
+            }
+        },
+        
+        redWall = ArticulatedModel::Specification {
+            filename = "ifs/crate.ifs",
+            preprocess = ArticulatedModel::Preprocess {
+                xform = Matrix4::scale(1, 0.01, 1),
+                materialOverride = Material::Specification {
+                    lambertian = Color3(1,0,0),
+                    specular = Color3(0.3),
+                    shininess = mirror()
+                }
+            }
+        },
+
+        
+        ball = ArticulatedModel::Specification {
+            filename = "ifs/sphere.ifs",
+            preprocess = ArticulatedModel::Preprocess {
+                xform = Matrix4::scale(0.1),
+                materialOverride = Material::Specification {
+                    lambertian = Color3(0.2),
+                    specular = Color3(0.5),
+                    shininess = mirror()
+                }
+            }
+        },
+    },
+    
+    lighting = Lighting::Specification {
+        lightArray = ( GLight {
+             position = Vector4(0, 0.45, 0, 1.0),
+             attenuation = (0,0,1),
+             color = Power3(3),
+           }
+         ),
+
+        environmentMap = {
+           constant = 0.0
+        }
+    },
+
+    entities = {
+        floor  = whiteWall(CFrame::fromXYZYPRDegrees(0,-0.5,0, 0,0,0)),
+        ceiling  = whiteWall(CFrame::fromXYZYPRDegrees(0,0.5,0, 0,0,0)),
+        back  = whiteWall(CFrame::fromXYZYPRDegrees(0,0,-0.5, 0,90,0)),
+        left  = greenWall(CFrame::fromXYZYPRDegrees(-0.5,0,0.0, 90,90,0)),
+        right = redWall(CFrame::fromXYZYPRDegrees(0.5,0,0.0, 90,90,0)),
+        yellowBall = ball(CFrame::fromXYZYPRDegrees(0,-0.175,0, 0,0,0)),
+    },
+    
+    camera = GCamera {
+        coordinateFrame = CFrame::fromXYZYPRDegrees( 0.5,   -0.1,   0.4,  51.6, 2.9),
+
+        nearPlaneZ = -0.5,
+        farPlaneZ = -100,
+        fovDirection = "VERTICAL",
+        fovDegrees = 50
+    }
+   
+}

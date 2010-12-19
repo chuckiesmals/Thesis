@@ -1,0 +1,113 @@
+/** 
+\mainpage
+Project 2 - Eye Rays Report - Suresh Malakar smalakar@vvisions.com
+
+@section arch_overview Architectural Overview
+\htmlonly
+
+<p>There are a few changes from the previous project.</p>
+
+<ul>
+<li>
+<h3>SuperBSDF and myShade</h3>
+<p>I moved the work being done in my shadePixel function to myShadePixel, and created shadeDirectBSDF and shadeIndirectBSDF. The BSDF functions use SuperBSDF, I did this just in case I felt like going back and doing my own lighting. I put a check in shadePixel now to use either one depending on what's been set in the UI.</p>
+</li>
+<li>
+<h3>Spotlight/Shadows</h3>
+<p>I factored out and made helper functions for the spotlight and shadow code, so I could use it in both the functions where I'm using SuperBSDF and myShade</p>
+</li>
+<li>
+<h3>Overall Flow</h3>
+<p>
+I tried to make some sort of flow below, but it didn't turn out well, but it sort of goes along with what I wrote in the Design Choices section.
+</p>
+
+</p>
+<p>
+<b>Render </b>[Decide -> Thread/No Thread/One Pixel] <b>then</b> <br>
+&nbsp;&nbsp;&nbsp;<b>backwardTrace</b>(pixel) [Generate Ray for pixel] <b>then</b> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>backwardTrace</b>(ray, bouncesLeft) [Decide -> TriTree/Array] <b>then</b> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>shadePixel </b>[Decide myShade/SuperBSDF] -> Perform shading + recursing<br>
+</ul>
+
+\endhtmlonly
+@section design_choices Design Choices
+<p>
+I tried to keep the same basic structure I had before, keeping the main problems separate (threading/intersection/shading). It basically starts on a pixel level at first, deciding whether or not to render a set of pixels via threads, or to just render them all in one thread, or to only render one pixel. From there, the next level goes from pixel space to world space, generating the ray, and choosing whether or not to use the TriTree or straight Array for intersections. From there it shades the pixel using either SuperBSDF or my old shade pixel function. I only have indirect light for the SuperBSDF path at the moment.
+
+@section known_errors Known Errors
+When rendering high poly models, I'm noticing a lot of speckling. My only guess as to why this is happening, is that for a pixel, there must be multiple triangles, or the triangles are very close to each other. I'm not sure what else it could be.
+
+\htmlonly
+<p><a border=0 href="error.png"><img src="thumb_error.png"></a></p>
+\endhtmlonly
+
+@section experiments Experiments
+<table border=0>
+<tr>
+	<td><img src="arraysearchchart.png"></td>
+</tr>
+<tr>
+	<td><img src="treesearchchart.png"></td>
+</tr>
+</table>
+
+
+@section Conclusions
+<p>Either the array search is surprisingly slow, or the TriTree is surprisingly fast. Regardless, I am very thankful the TriTree is as fast as it is! It was reassuring to see that the multi threaded Array Search is roughly 3-4 times faster. I should have had another data point around 35000 triangles for the Array Search, just to see how that increase would play out.</p>
+
+<p>For the TriTree, the performance seems to scale as you'd expect, but I probably should have tried a larger set of triangles to really push the TriTree. The render times are probably too low to really see performance differences.</p>
+
+
+@section Images
+\htmlonly
+<table border=0>
+<tr>
+<td> 
+<h2>Cornell Box</h2>
+<a href="cornell.png"><img src="thumb_cornell.png"></a>
+</td>
+</tr>
+
+<tr>
+<td> 
+<h2>Mirror Box</h2>
+<p><a border=0 href="mirror_1.png"><img src="thumb_mirror_1.png"></a>
+<p><a border=0 href="mirror_2.png"><img src="thumb_mirror_2.png"></a>
+<p><a border=0 href="mirror_7.png"><img src="thumb_mirror_7.png"></a>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>Custom Scene</h2>
+<p><a border=0 href="custom1.png"><img src="thumb_custom1.png"></a>
+<p><a border=0 href="custom2.png"><img src="thumb_custom2.png"></a>
+<p><a border=0 href="custom3.png"><img src="thumb_custom3.png"></a>
+
+</td>
+</tr>
+</table>
+\endhtmlonly
+
+@section Feedback
+<ol>
+	<li>
+		<h3>How many hours you spent outside of class on this project on required elements.</h3>
+		<p>I ended up spending more than usual due to weird hardware problems on my home machine. I tried debugging the problem for a while and just gave up. My work computer seems to work just fine, it's strange. So all in all probably 7-9 hours or so.</p>
+	</li>
+	<li>
+		<h3>How many hours spent on additional elements?</h3>
+		<p>About an hour.</p>
+	</li>
+	<li>
+		<h3>Difficulty of project as 300-level course? Why?</h3>
+		<p>You helped out a lot with code in class for the parts of the project that did the work, probably was actually easier than the others.</p>
+	</li>
+	<li>
+		<h3>What did you learn? Rate educational value 1-5.</h3>
+		<p>3... shadows and reflections are pretty cool.</p>
+	</li>
+</ol>
+
+**/

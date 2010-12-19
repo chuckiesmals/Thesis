@@ -1,0 +1,119 @@
+// -*- c++ -*-
+// You can extend this sample scene file format with your own fields.
+// Edit the scene parsing in Scene.cpp.
+{
+    name = "Cornell Box",
+   
+    models = {
+      
+       whiteWall = ArticulatedModel::Specification 
+	   {
+            filename = "ifs/cube.ifs",
+			preprocess = ArticulatedModel::Preprocess 
+			{
+				xform = Matrix4::scale(0.025f, 1.0f, 1.0f),
+				materialoverride = Color3(1.0f, 1.0f, 1.0f),
+			},
+       },
+
+	   redWall = ArticulatedModel::Specification 
+	   {
+            filename = "ifs/cube.ifs",
+			preprocess = ArticulatedModel::Preprocess 
+			{
+				xform = Matrix4::scale(0.025f, 1.0f, 1.0f),
+				materialoverride = Color3(1.0f, 0.0f, 0.0f),
+			},
+       },
+
+	   greenWall = ArticulatedModel::Specification 
+	   {
+            filename = "ifs/cube.ifs",
+			preprocess = ArticulatedModel::Preprocess 
+			{
+				xform = Matrix4::scale(0.025f, 1.0f, 1.0f),
+				materialoverride = Color3(0.0f, 1.0f, 0.0f),
+			},
+       },
+
+	   shortBox = ArticulatedModel::Specification 
+	   {
+            filename = "ifs/cube.ifs",
+			preprocess = ArticulatedModel::Preprocess 
+			{
+				xform = Matrix4::scale(0.3f, 0.3f, 0.3f),
+				materialoverride = Color3(1.0f, 1.0f, 1.0f),
+			},
+       },
+
+	   tallBox = ArticulatedModel::Specification 
+	   {
+            filename = "ifs/cube.ifs",
+			preprocess = ArticulatedModel::Preprocess 
+			{
+				xform = Matrix4::scale(0.3, 0.6, 0.3),
+				materialOverride = Material::Specification 
+                {
+                    lambertian  = Color3(0.01),
+                    specular    = Color3(0.9),
+                    shininess   = mirror()
+                }
+			},
+       },
+       
+       
+    },
+    
+    lighting = Lighting::Specification {
+        lightArray = (
+		GLight 
+		{
+			position = Vector4(0, .4, 0, 1.0), 
+            attenuation = (0,0,1),
+			color = Power3(1)
+		}),
+			
+        environmentMap = {
+            constant = 1.0,
+            texture = Texture::Specification {
+                filename      = "cubemap/whiteroom/whiteroom_*.png",
+                desiredFormat = "RGB8",
+                dimension     = "DIM_CUBE_MAP",
+                settings      = Texture::Settings::cubeMap(),
+                preprocess    = Texture::Preprocess::gamma(3.0f)
+            }
+        },
+    },
+
+    
+    entities = {
+        // Each entity has a name and is an instance of a model.  The instantiation syntax accepts
+        // two (optional) arguments: a position spline (which can be a single position), and a 
+        // pose spline (which can be a single pose).
+
+		// sides        
+		c0 = redWall(CFrame::fromXYZYPRDegrees(-0.5,0.0,0.0, 0,0,0)),
+        c1 = greenWall(CFrame::fromXYZYPRDegrees(0.5,0.0,0.0, 0,0,0)),
+		// top/bottom
+		c2 = whiteWall(CFrame::fromXYZYPRDegrees(0.0,-0.5,0.0, 0,0,90)),
+		c3 = whiteWall(CFrame::fromXYZYPRDegrees(0.0,0.5,0.0, 0,0,90)),
+
+		// back
+		c4 = whiteWall(CFrame::fromXYZYPRDegrees(0.0,0.0,-0.5, 90,0,0)),
+
+		c5 = shortBox(CFrame::fromXYZYPRDegrees(0.2f,-0.335f,0.25f, -15.0f,-0.2f,0.0f)),
+
+		c6 = tallBox(CFrame::fromXYZYPRDegrees(-0.2f,-0.185f,-0.2f, 115.0f,-0.3f,0.0f)),
+		
+    },
+    
+    camera = GCamera {
+        coordinateFrame = CFrame::fromXYZYPRDegrees( -0.0f,   0.6f,   1.8f,  341.1f,  -0.0f,   0.0f),
+        
+        nearPlaneZ = -0.5,
+        farPlaneZ = -50,
+        fovDirection = "VERTICAL",
+        fovDegrees = 60
+    }
+   
+}
